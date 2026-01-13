@@ -1,0 +1,95 @@
+@page "/livro"
+@using GestaoClientes.Web.Models
+@inject HttpClient Http
+@inject NavigationManager Navigation 
+
+<PageTitle>Livros</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Lista de Livros</h1>
+    <button class="btn btn-primary" @onclick="IrParaCriacao">
+        + Novo Livro
+    </button>
+</div>
+
+@if (livros == null)
+{
+    <p><em>Carregando...</em></p>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Id</th>
+                <th>Titulo</th>
+                <th>AnoPublicacao</th>
+                <th>AutorId</th> 
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var livro in livros)
+            {
+                <tr>
+                    <td>@livro.Id</td>
+                    <td>@livro.Titulo</td>
+                    <td>@livro.AnoPublicacao</td>
+                    <td>@livro.AutorId</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-2" 
+                                @onclick="() => IrParaEdicao(livro.Id)">
+                            Editar
+                        </button>
+
+                        <button class="btn btn-sm btn-danger" 
+                                @onclick="() => DeletarLivro(livro.Id)">
+                            Excluir
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Livro[]? livros;
+
+    // URL base da API (Ajuste a porta se necessário)
+    private string ApiUrl = "http://localhost:5149/api/livros"; 
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregarLivros();
+    }
+
+    private async Task CarregarLivros()
+    {
+        livros = await Http.GetFromJsonAsync<Livro[]>(ApiUrl);
+    }
+
+    // --- A MÁGICA DO DELETE ---
+    private async Task DeletarLivro(int id)
+    {
+        // Chama a API direto: DELETE api/clientes/5
+        var resposta = await Http.DeleteAsync($"{ApiUrl}/{id}");
+
+        if (resposta.IsSuccessStatusCode)
+        {
+            // Atualiza a tabela removendo o item da lista local visualmente
+            // (Isso evita ter que ir no banco buscar tudo de novo)
+            livros = livros?.Where(c => c.Id != id).ToArray();
+        }
+    }
+
+    // Navegação (Vamos criar essas páginas depois)
+    private void IrParaCriacao()
+    {
+        Navigation.NavigateTo("/livro/form");
+    }
+
+    private void IrParaEdicao(int id)
+    {
+        Navigation.NavigateTo($"/livro/form/{id}");
+    }
+}

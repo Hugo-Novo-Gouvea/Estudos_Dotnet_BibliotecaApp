@@ -1,0 +1,72 @@
+@page "/autor/form" 
+@page "/autor/form/{id:int}"
+@using GestaoClientes.Web.Models
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<PageTitle>Cadastro de Autor</PageTitle>
+
+<h3>@Titulo</h3> <EditForm Model="autor" OnValidSubmit="SalvarAutor">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label>Nome:</label>
+        <InputText @bind-Value="autor.Nome" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Nacionalidade:</label>
+        <InputText @bind-Value="cliente.Nacionalidade" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Salvar</button>
+    <button type="button" class="btn btn-secondary" @onclick="Voltar">Cancelar</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; } // O ID vem da URL (pode ser nulo se for novo)
+
+    private Autor autor = new Autor();
+    private string Titulo = "Novo Autor";
+    
+    // URL da API (Ajuste a porta se necessário)
+    private string ApiUrl = "http://localhost:5149/api/autores"; 
+
+    // 1. Ao iniciar a página
+    protected override async Task OnInitializedAsync()
+    {
+        // Se tiver ID na URL, é EDIÇÃO. Busca os dados no banco.
+        if (Id is not null)
+        {
+            Titulo = "Editar Autor";
+            // GET api/clientes/5
+            autor = await Http.GetFromJsonAsync<Autor>($"{ApiUrl}/{Id}");
+        }
+    }
+
+    // 2. Ao clicar em Salvar
+    private async Task SalvarAutor()
+    {
+        if (Id is not null)
+        {
+            // --- LÓGICA DE ATUALIZAR (PUT) ---
+            // PUT api/clientes/5
+            await Http.PutAsJsonAsync($"{ApiUrl}/{Id}", autor);
+        }
+        else
+        {
+            // --- LÓGICA DE CRIAR (POST) ---
+            // POST api/clientes
+            await Http.PostAsJsonAsync(ApiUrl, autor);
+        }
+
+        // Depois de salvar, volta para a lista
+        Navigation.NavigateTo("/");
+    }
+
+    private void Voltar()
+    {
+        Navigation.NavigateTo("/");
+    }
+}

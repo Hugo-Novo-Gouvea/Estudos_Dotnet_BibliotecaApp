@@ -1,0 +1,31 @@
+﻿@page "/"
+@using GestaoClientes.Web.Models
+@inject HttpClient Http
+@inject NavigationManager Navigation 
+
+<PageTitle>Pagina Inicial</PageTitle>
+
+<div class="d-flex align-items-center mb-3">
+    <h1>Lista de Autores</h1>
+    <button class="btn btn-primary" @onclick="IrAutor">
+        Autor
+    </button>
+    <button class="btn btn-primary" @onclick="IrLivro">
+        Livro
+    </button>
+</div>
+
+
+
+@code {
+    // Navegação (Vamos criar essas páginas depois)
+    private void IrAutor()
+    {
+        Navigation.NavigateTo("/autor");
+    }
+
+    private void IrLivro()
+    {
+        Navigation.NavigateTo("/livro");
+    }
+}

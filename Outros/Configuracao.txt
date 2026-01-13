@@ -1,0 +1,45 @@
+=== RESUMO DE COMANDOS: API .NET + POSTGRES ===
+
+1. CONFIGURAÇÃO INICIAL
+-----------------------
+# Criar a pasta e o projeto da API
+dotnet new webapi -n GestaoClientes.API
+
+2. INSTALAÇÃO DE PACOTES (INGREDIENTES DO PROJETO)
+--------------------------------------------------
+# Entrar na pasta
+cd GestaoClientes.API
+
+# O Motor do Banco de Dados (Entity Framework Core) - Versão 9 (Compatível com .NET 9)
+dotnet add package Microsoft.EntityFrameworkCore --version 9.0.0
+
+# O Tradutor para Postgres
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL --version 9.0.0
+
+# As Ferramentas de Design (Necessário para Migrations)
+dotnet add package Microsoft.EntityFrameworkCore.Design --version 9.0.0
+
+# Documentação Visual (Swagger) - Versão Estável
+dotnet add package Swashbuckle.AspNetCore --version 7.0.0
+
+3. CONFIGURAÇÃO DA FERRAMENTA DE MIGRATION (A MÁQUINA DE CONSTRUÇÃO)
+--------------------------------------------------------------------
+# Nota: Como a instalação global pode falhar ou ter versões incompatíveis, 
+# usamos a instalação LOCAL (apenas neste projeto).
+
+# 1. Limpar cache (para evitar arquivos corrompidos antigos)
+dotnet nuget locals all --clear
+
+# 2. Criar o Manifesto (Arquivo que permite usar ferramentas locais)
+dotnet new tool-manifest
+
+# 3. Instalar a ferramenta dotnet-ef (apenas nesta pasta)
+dotnet tool install dotnet-ef --version 9.0.0
+
+4. CRIANDO O BANCO DE DADOS (DATABASE FIRST)
+--------------------------------------------
+# 1. Criar o Roteiro (Migration) baseado nas suas Classes
+dotnet ef migrations add CriandoTabelaClientes
+
+# 2. Executar o Roteiro (Criar tabelas no Postgres real)
+dotnet ef database update
