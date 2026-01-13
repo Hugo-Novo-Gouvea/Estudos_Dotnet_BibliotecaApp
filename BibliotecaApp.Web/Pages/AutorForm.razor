@@ -1,6 +1,6 @@
 @page "/autor/form" 
 @page "/autor/form/{id:int}"
-@using GestaoClientes.Web.Models
+@using BibliotecaApp.Web.Models
 @inject HttpClient Http
 @inject NavigationManager Navigation
 
@@ -16,7 +16,7 @@
 
     <div class="mb-3">
         <label>Nacionalidade:</label>
-        <InputText @bind-Value="cliente.Nacionalidade" class="form-control" />
+        <InputText @bind-Value="autor.Nacionalidade" class="form-control" />
     </div>
 
     <button type="submit" class="btn btn-success">Salvar</button>
@@ -31,7 +31,7 @@
     private string Titulo = "Novo Autor";
     
     // URL da API (Ajuste a porta se necessário)
-    private string ApiUrl = "http://localhost:5149/api/autores"; 
+    private string ApiUrl = "http://localhost:5265/api/autores"; 
 
     // 1. Ao iniciar a página
     protected override async Task OnInitializedAsync()

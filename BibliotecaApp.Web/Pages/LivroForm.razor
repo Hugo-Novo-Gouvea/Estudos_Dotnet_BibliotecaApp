@@ -1,6 +1,6 @@
 @page "/livro/form" 
 @page "/livro/form/{id:int}"
-@using GestaoClientes.Web.Models
+@using BibliotecaApp.Web.Models
 @inject HttpClient Http
 @inject NavigationManager Navigation
 
@@ -16,7 +16,7 @@
 
     <div class="mb-3">
         <label>Ano de Publicacao:</label>
-        <InputText @bind-Value="livro.AnoPublicacao" class="form-control" />
+        <InputNumber @bind-Value="livro.AnoPublicacao" class="form-control" />
     </div>
 
     <button type="submit" class="btn btn-success">Salvar</button>
@@ -31,7 +31,7 @@
     private string Titulo = "Novo Livro";
     
     // URL da API (Ajuste a porta se necessário)
-    private string ApiUrl = "http://localhost:5149/api/livros"; 
+    private string ApiUrl = "http://localhost:5265/api/livros"; 
 
     // 1. Ao iniciar a página
     protected override async Task OnInitializedAsync()

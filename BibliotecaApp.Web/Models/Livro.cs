@@ -8,6 +8,6 @@ public class Livro
     
     // FK
     public int AutorId { get; set; }
-    public Autor Autor { get; set; }
+    public Autor? Autor { get; set; }
 
 }
